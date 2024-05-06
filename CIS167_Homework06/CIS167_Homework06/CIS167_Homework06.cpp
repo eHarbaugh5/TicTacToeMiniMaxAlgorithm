@@ -15,133 +15,138 @@ int startAiMinMax(Board, bool);
 
 int main()
 {
-    
-    Board gameBoard;
+    int playAgain = 1;
 
-    
-
-    bool playerTurn = true;
-
-    int timer = 9;
-
-    int testnum = 2;
-
-    const bool testingTrue = false;
-    
-
-    if (testingTrue)
-    {
-        //cout << "Choose a Game State" << endl;
-
-        //cin >> testnum;
-
-        if (testnum == 1)
-        {
-            gameBoard.addPiece(0, 0, "X");
-            gameBoard.addPiece(2, 1, "O");
-            gameBoard.addPiece(1, 0, "X");
-            gameBoard.addPiece(2, 2, "O");
-        }
-        else if (testnum == 2)
-        {
-            gameBoard.addPiece(1, 1, "X");
-            gameBoard.addPiece(2, 0, "O");
-            gameBoard.addPiece(2, 2, "X");
-            gameBoard.addPiece(0, 0, "O");
-        }
-        else if (testnum == 3)
-        {
-
-            gameBoard.addPiece(0, 0, "X");
-            gameBoard.addPiece(0, 1, "O");
-            gameBoard.addPiece(1, 0, "X");
-            gameBoard.addPiece(0, 2, "O");
-            gameBoard.addPiece(1, 2, "X");
-            gameBoard.addPiece(1, 1, "O");
-
-        }
-    }
-    
-
-    system("cls");
-
-    //  display initial board
-    displayCurrentBoard(gameBoard);
-
-
-
-    //  Gameplay Loop 
+    //  GAME LOOP ========================================================
     do {
 
+
+
+        Board gameBoard;
+
+        bool playerTurn = true;
+
+        int timer = 9;
+
+        int startingTurn;
+
+        system("cls");
+
+        do {
+            cout << "Who Goes First? [1->You] or [2->Ai] or [3->Random]" << endl;
+            cin >> startingTurn;
+        } while (startingTurn < 1 && startingTurn > 3);
         
-
-        if (playerTurn)
+        if (startingTurn == 3)
         {
+            startingTurn = rand() % 2 + 1;
+        }
 
-            int userInput;
-            int inputX;
-            int inputY;
-
-            //  ask until a piece is placed
-
-            do {
-
-                //  ask until proper input is given
-
-                do {
-
-
-                    cout << "Choose a location" << endl;
-
-                    cin >> userInput;
-                } while (userInput < 0 || userInput > 8);
-               
-
-
-                inputX = userInput % 3;
-                inputY = (userInput - inputX) / 3;
-
-
-
-
-            } while (!gameBoard.canPlacePiece(inputX, inputY));
-
-            
-
-            
-            gameBoard.addPiece(inputX, inputY, "X");
-
+        if (startingTurn == 1)
+        {
+            playerTurn = true;
         }
         else
         {
-            
-            cout << "Ai turn" << endl;
-            int aiX;
-            int aiY;
-            int aiPlacement = startAiMinMax(gameBoard, false);
-
-            aiX = aiPlacement % 3;
-            aiY = (aiPlacement - aiX) / 3;
-
-            gameBoard.addPiece(aiX, aiY, "O");
-
-
-        }
-        //  display board after each move
-        system("cls");
-        displayCurrentBoard(gameBoard);
-        if (gameBoard.checkForWinner() != "N")
-        {
-            timer = 0;
+            playerTurn = false;
         }
         
 
-        playerTurn = !playerTurn;
-        timer--;
+        system("cls");
 
-    } while (timer > 0);
-    
-    cout << "Winner : " << gameBoard.checkForWinner() << endl;
+        //  display initial board
+        displayCurrentBoard(gameBoard);
+
+
+
+        //  Gameplay Loop 
+        do {
+
+
+
+            if (playerTurn)
+            {
+
+                int userInput;
+                int inputX;
+                int inputY;
+
+                //  ask until a piece is placed
+
+                do {
+
+                    //  ask until proper input is given
+
+                    do {
+
+
+                        cout << "Choose a location" << endl;
+
+                        cin >> userInput;
+                    } while (userInput < 0 || userInput > 8);
+
+
+
+                    inputX = userInput % 3;
+                    inputY = (userInput - inputX) / 3;
+
+
+
+
+                } while (!gameBoard.canPlacePiece(inputX, inputY));
+
+
+
+
+                gameBoard.addPiece(inputX, inputY, "X");
+
+            }
+            else
+            {
+
+                cout << "Ai turn" << endl;
+                int aiX;
+                int aiY;
+                int aiPlacement = startAiMinMax(gameBoard, false);
+
+                aiX = aiPlacement % 3;
+                aiY = (aiPlacement - aiX) / 3;
+
+                gameBoard.addPiece(aiX, aiY, "O");
+
+
+            }
+            //  display board after each move
+            system("cls");
+            displayCurrentBoard(gameBoard);
+            if (gameBoard.checkForWinner() != "N")
+            {
+                timer = 0;
+            }
+
+
+            playerTurn = !playerTurn;
+            timer--;
+
+        } while (timer > 0);
+
+        cout << "Winner : " << gameBoard.checkForWinner() << endl;
+
+
+
+        cout << endl << endl << endl;
+
+        do {
+            cout << "Play Again [1-> Yes] or [2-> No]" << endl;
+            cin >> playAgain;
+        } while (playAgain != 1 && playAgain != 2);
+        
+        
+
+
+
+    } while (playAgain == 1);
+    //  GAME LOOP ========================================================
 
 
 }
@@ -229,12 +234,10 @@ int aiMinMax(Board miniBoard, bool min)
         {
             for (int x = 0; x < 3; x++)
             {
-                //  Tally all of the possible moves down to the last turn
 
                 if (miniBoard.canPlacePiece(x, y))
                 {
 
-                    //miniBoard.addPiece(x, y, turn); 
                     Board boardToPass = miniBoard;
                     boardToPass.addPiece(x, y, turn);
                     int currScore = aiMinMax(boardToPass, !min);
@@ -242,7 +245,6 @@ int aiMinMax(Board miniBoard, bool min)
                     if (currScore < bestScore)
                     {
                         bestScore = currScore;
-                        //cout << "maxed: " << bestScore << endl;
 
                     }
 
@@ -269,19 +271,16 @@ int aiMinMax(Board miniBoard, bool min)
         {
             for (int x = 0; x < 3; x++)
             {
-                //  Tally all of the possible moves down to the last turn
 
                 if (miniBoard.canPlacePiece(x, y))
                 {
 
-                    //miniBoard.addPiece(x, y, turn); 
                     Board boardToPass = miniBoard;
                     boardToPass.addPiece(x, y, turn);
                     int currScore = aiMinMax(boardToPass, !min);
                     if (currScore > bestScore)
                     {
                         bestScore = currScore;
-                        //cout << "maxed: " << bestScore << endl;
 
                     }
 
