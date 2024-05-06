@@ -44,10 +44,10 @@ int main()
         }
         else if (testnum == 2)
         {
-            gameBoard.addPiece(0, 0, "X");
+            gameBoard.addPiece(1, 1, "X");
             gameBoard.addPiece(2, 0, "O");
             gameBoard.addPiece(2, 2, "X");
-            gameBoard.addPiece(0, 2, "O");
+            gameBoard.addPiece(0, 0, "O");
         }
         else if (testnum == 3)
         {
@@ -130,7 +130,7 @@ int main()
         //  display board after each move
         system("cls");
         displayCurrentBoard(gameBoard);
-        if (gameBoard.checkForWinner() != "n")
+        if (gameBoard.checkForWinner() != "N")
         {
             timer = 0;
         }
@@ -167,11 +167,11 @@ int startAiMinMax(Board miniBoard, bool min)
             if (miniBoard.canPlacePiece(x, y))
             {
 
-                //miniBoard.addPiece(x, y, turn); 
                 Board boardToPass = miniBoard;
                 boardToPass.addPiece(x, y, "O");
 
                 int currScore = aiMinMax(boardToPass, !min);
+
                 if (currScore > bestScore)
                 {
                     bestScore = currScore;
@@ -180,6 +180,7 @@ int startAiMinMax(Board miniBoard, bool min)
                 }
 
             }
+           
 
 
         }
@@ -207,6 +208,13 @@ int aiMinMax(Board miniBoard, bool min)
     {
         return -1;
     }
+    else if (miniBoard.checkForWinner() == "C")
+    {
+        return 0;
+    }
+    
+    
+    
 
     string turn;
     if (min)
@@ -215,7 +223,7 @@ int aiMinMax(Board miniBoard, bool min)
         //  player turn
 
         turn = "X";
-        int bestScore = 0;
+        int bestScore = 10;
 
         for (int y = 0; y < 3; y++)
         {
@@ -229,11 +237,13 @@ int aiMinMax(Board miniBoard, bool min)
                     //miniBoard.addPiece(x, y, turn); 
                     Board boardToPass = miniBoard;
                     boardToPass.addPiece(x, y, turn);
-
                     int currScore = aiMinMax(boardToPass, !min);
+                    
                     if (currScore < bestScore)
                     {
                         bestScore = currScore;
+                        //cout << "maxed: " << bestScore << endl;
+
                     }
 
                 }
@@ -253,7 +263,7 @@ int aiMinMax(Board miniBoard, bool min)
         //  ai turn
 
         turn = "O";
-        int bestScore = 0;
+        int bestScore = -10;
 
         for (int y = 0; y < 3; y++)
         {
@@ -267,11 +277,12 @@ int aiMinMax(Board miniBoard, bool min)
                     //miniBoard.addPiece(x, y, turn); 
                     Board boardToPass = miniBoard;
                     boardToPass.addPiece(x, y, turn);
-
                     int currScore = aiMinMax(boardToPass, !min);
                     if (currScore > bestScore)
                     {
                         bestScore = currScore;
+                        //cout << "maxed: " << bestScore << endl;
+
                     }
 
                 }
@@ -286,10 +297,6 @@ int aiMinMax(Board miniBoard, bool min)
 
 
     }
-    
-
-
-    
 
 
 

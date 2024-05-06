@@ -39,6 +39,29 @@ bool Board::canPlacePiece(int one, int two)
 	return false;
 	
 }
+bool Board::boardIsFull()
+{
+
+	for (int y = 0; y < 3; y++)
+	{
+		for (int x = 0; x < 3; x++)
+		{
+			//  Tally all of the possible moves down to the last turn
+
+			if (getBoardPiece(x, y) != "O" && getBoardPiece(x, y) != "X")
+			{
+				//cout << getBoardPiece(x, y) << endl;
+				return false;
+
+			}
+
+		}
+
+	}
+	return true;
+
+
+}
 string Board::checkForWinner()
 {
 
@@ -130,7 +153,19 @@ string Board::checkForWinner()
 		return winnerCheck;
 	}
 
-	return "n";
+	
+	if (boardIsFull())
+	{
+		//cout << "Cat" << endl;
+		return "C";
+	}
+	else
+	{
+		//cout << "N" << endl;
+		return "N";
+	}
+	
+
 
 }
 

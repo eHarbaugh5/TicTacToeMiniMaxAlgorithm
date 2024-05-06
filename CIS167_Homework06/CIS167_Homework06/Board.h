@@ -14,6 +14,7 @@ class Board
 		void addPiece(int, int, string);
 		string getBoardPiece(int, int);
 		bool canPlacePiece(int, int);
+		bool boardIsFull();
 		//bool checkOpenSpot(int, int);
 		string checkForWinner();
 
