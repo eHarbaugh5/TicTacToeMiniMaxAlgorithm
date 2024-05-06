@@ -158,6 +158,7 @@ int startAiMinMax(Board miniBoard, bool min)
     int bestScore = -99;
     int a;
     int b;
+    Board boardToPass;
 
     for (int y = 0; y < 3; y++)
     {
@@ -172,7 +173,7 @@ int startAiMinMax(Board miniBoard, bool min)
             if (miniBoard.canPlacePiece(x, y))
             {
 
-                Board boardToPass = miniBoard;
+                boardToPass = miniBoard;
                 boardToPass.addPiece(x, y, "O");
 
                 int currScore = aiMinMax(boardToPass, !min);
@@ -205,15 +206,17 @@ int startAiMinMax(Board miniBoard, bool min)
 int aiMinMax(Board miniBoard, bool min)
 {
 
-    if (miniBoard.checkForWinner() == "O")
+    string winner = miniBoard.checkForWinner();
+
+    if (winner == "O")
     {
         return 1;
     }
-    else if (miniBoard.checkForWinner() == "X")
+    else if (winner == "X")
     {
         return -1;
     }
-    else if (miniBoard.checkForWinner() == "C")
+    else if (winner == "C")
     {
         return 0;
     }
@@ -229,6 +232,7 @@ int aiMinMax(Board miniBoard, bool min)
 
         turn = "X";
         int bestScore = 10;
+        Board boardToPass;
 
         for (int y = 0; y < 3; y++)
         {
@@ -238,7 +242,7 @@ int aiMinMax(Board miniBoard, bool min)
                 if (miniBoard.canPlacePiece(x, y))
                 {
 
-                    Board boardToPass = miniBoard;
+                    boardToPass = miniBoard;
                     boardToPass.addPiece(x, y, turn);
                     int currScore = aiMinMax(boardToPass, !min);
                     
@@ -266,6 +270,7 @@ int aiMinMax(Board miniBoard, bool min)
 
         turn = "O";
         int bestScore = -10;
+        Board boardToPass;
 
         for (int y = 0; y < 3; y++)
         {
@@ -274,8 +279,7 @@ int aiMinMax(Board miniBoard, bool min)
 
                 if (miniBoard.canPlacePiece(x, y))
                 {
-
-                    Board boardToPass = miniBoard;
+                    boardToPass = miniBoard;
                     boardToPass.addPiece(x, y, turn);
                     int currScore = aiMinMax(boardToPass, !min);
                     if (currScore > bestScore)
